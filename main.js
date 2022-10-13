@@ -1,26 +1,38 @@
-function fetchData() {
-  fetch(
-    "https://api.spoonacular.com/recipes/findByIngredients?apiKey=d3a3d82595e240aeb81ed19331e08785&ingredients=lime&number=5"
-  )
+function fetchData(ingredient) {
+  let url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=1d6b052419664714bf2fab7378a281c7&ingredients=${ingredient}&number=5`;
+  fetch("./response.json")
     .then((response) => {
       return response.json();
     })
     .then((result) => {
-      console.log("result>>", result);
       let myData = result;
+      console.log(myData);
       creatingRecipes(myData);
-      addEvents();
+      addEvents(myData);
+      // createDropdown(data);
+      const ingredientsCount = calculatingTotalNeededIngredients(myData);
+      // console.log("ingredientsCount", ingredientsCount);
+      // const cleanedIng = cleanedIng(ingredientsCount);
+      // const filteredResult = filterByDropdown(ingredientsCount);
     })
     .catch((error) => console.log(error));
 }
+function localData() {
+  let myData = data;
+  console.log(myData);
+  creatingRecipes(myData);
+  addEvents(myData);
+}
+// fetchData("lime");
+localData();
 
-function creatingRecipes(data) {
+function creatingRecipes(recipes) {
   const container = document.getElementById("cards-container");
 
-  for (let i = 0; i < data.length; i++) {
-    //Add DOM elements and bring in dynamic data:
+  container.innerText = "";
+
+  for (let i = 0; i < recipes.length; i++) {
     let divCard = document.createElement("div");
-    // divCard.setAttribute("style", "width: 18rem;");
     divCard.setAttribute(
       "class",
       "col-sm-12 col-md-6 col-lg-4 g-2 g-lg-3 p-3 "
@@ -29,8 +41,8 @@ function creatingRecipes(data) {
     container.appendChild(divCard);
 
     let img = document.createElement("img");
-    img.setAttribute("src", data[i].image);
-    img.setAttribute("alt", data[i].title);
+    img.setAttribute("src", recipes[i].image);
+    img.setAttribute("alt", recipes[i].title);
     divCard.appendChild(img);
 
     let cardBody = document.createElement("div");
@@ -39,7 +51,7 @@ function creatingRecipes(data) {
 
     let cardTitle = document.createElement("h5");
     cardTitle.classList.add("card-title");
-    cardTitle.innerText = data[i].title;
+    cardTitle.innerText = recipes[i].title;
     divCard.appendChild(cardTitle);
 
     let cardText = document.createElement("p");
@@ -50,14 +62,41 @@ function creatingRecipes(data) {
   }
 }
 
-function addEvents() {
-  for (let i = 0; i < document.querySelectorAll(".card").length; i++) {
+function calculatingTotalNeededIngredients(recipes) {
+  neededIngredientsArray = [];
+  console.log("neededIngredientsArray>>", neededIngredientsArray);
+  for (let i = 0; i < recipes.length; i++) {
+    neededIngredientsArray.push(
+      recipes[i].missedIngredientCount + recipes[i].usedIngredientCount
+    );
+  }
+  return neededIngredientsArray;
+}
+
+// function creatingDropdown(recipes) {}
+
+// cretae input
+// add events to those inouts
+// filter function the values of the checkboxes that have been cliked
+
+// inputs values, max value
+
+function addEvents(recipes) {
+  let cards = document.querySelectorAll(".card");
+  for (let i = 0; i < cards.length; i++) {
     divCardTextTargets = document.querySelectorAll(".card")[i];
 
     divCardTextTargets.addEventListener("click", (e) => {
       unhideText(e);
     });
   }
+  // Uncomment to test
+  let dropdown = document.getElementById("ingredientsDropdown");
+  dropdown.addEventListener("change", (e) => {
+    // console.log("# of recipe dropdown works");
+    const value = filterByDropdown(recipes);
+    console.log("value>>", value);
+  });
 }
 
 function unhideText(e) {
@@ -66,7 +105,27 @@ function unhideText(e) {
   e.currentTarget.childNodes[3].classList.toggle("invisable");
 }
 
-fetchData();
+function filterByDropdown(recipes) {
+  // console.log("I am filtering by dropdown");
+  const dropDownValue = document.getElementById("ingredientsDropdown").value;
+  console.log("dropDownValue>>", dropDownValue);
+  if (dropDownValue === "allIngredientsSelected") {
+    creatingRecipes(recipes);
+  } else {
+    const dropDownValueInt = parseInt(dropDownValue);
+    // console.log("dropDownValueInt>>", dropDownValueInt);
+    // console.log("recipes>>", recipes);
+    // const filteredOptions = recipes.filter();
+    let filteredRecepieOptions = recipes.filter((recipe) => {
+      const count = recipe.missedIngredientCount + recipe.usedIngredientCount;
+      return count === dropDownValueInt;
+    });
+    //Skriv .filter igen har
+    // console.log("filteredOptions>>", filteredOptions);
+    creatingRecipes(filteredRecepieOptions);
+  }
+  // console.log(filteredOptions);
+}
 
 //To dos
 //1. Itterate over the images X
@@ -80,3 +139,119 @@ fetchData();
 // Question: function() in arguments but not when you include it as a argument in calling it?
 // Friday fetch
 // XX.json() that is a method that transfor XX to a json file (so JavaScript can read it
+
+// // Function declaration
+// function name(params) {}
+// // function expression
+// const myFunction = function () {};
+
+// const arrowFnc = () => {};
+
+// WANT TO REMOVE DUPLICATES AND SORT TO USE FOR THE DROPDOWN LIST:
+
+// function filterByDropdown(recipes) {
+//   // console.log("I am filtering by dropdown");
+//   const dropDownValue = document.getElementById("ingredientsDropdown").value;
+//   console.log("dropDownValue>>", dropDownValue);
+//   if (dropDownValue === "all") {
+//     creatingRecipes(recipes);
+//   } else {
+//     const dropDownValueInt = parseInt(dropDownValue);
+//     // console.log("dropDownValueInt>>", dropDownValueInt);
+//     // console.log("recipes>>", recipes);
+//     const filteredOptions = recipes.filter((recipe) => {
+//       const count = recipe.missedIngredientCount + recipe.usedIngredientCount;
+//       return count === dropDownValueInt;
+//     });
+//     console.log("filteredOptions>>", filteredOptions);
+//     creatingRecipes(filteredOptions);
+//   }
+//   // console.log(filteredOptions);
+// }
+
+// // Anvand denna
+// const ALL_INGREDIENTS_SELECTED = -1;
+// function filterByDropdown(recipes) {
+//   // console.log("I am filtering by dropdown");
+//   const dropDownValue = document.getElementById("ingredientsDropdown").value;
+//   console.log("dropDownValue>>", dropDownValue);
+//   // if (dropDownValue === "-1") {
+//   //   creatingRecipes(recipes);
+//   // } else {
+//   const dropDownValueInt = parseInt(dropDownValue);
+//   // console.log("dropDownValueInt>>", dropDownValueInt);
+//   // console.log("recipes>>", recipes);
+//   const filteredOptions = recipes.filter((recipe) => {
+//     const count = recipe.missedIngredientCount + recipe.usedIngredientCount;
+//     return (
+//       dropDownValueInt === ALL_INGREDIENTS_SELECTED ||
+//       count === dropDownValueInt
+//     );
+//   });
+
+//   console.log("filteredOptions>>", filteredOptions);
+//   creatingRecipes(filteredOptions);
+//   // }
+//   // console.log(filteredOptions);
+// }
+
+// function filterByDropdown(recipes) {
+//   // console.log("I am filtering by dropdown");
+//   const dropDownValue = document.getElementById("ingredientsDropdown").value;
+//   console.log("dropDownValue>>", dropDownValue);
+//   if (dropDownValue === "allIngredientsSelected") {
+//     creatingRecipes(recipes);
+//   } else {
+//     const dropDownValueInt = parseInt(dropDownValue);
+//     // console.log("dropDownValueInt>>", dropDownValueInt);
+//     // console.log("recipes>>", recipes);
+//     const filteredOptions = recipes.filter((recipe) => {
+//       const count = recipe.missedIngredientCount + recipe.usedIngredientCount;
+//       return count === dropDownValueInt;
+//     });
+//     console.log("filteredOptions>>", filteredOptions);
+//     creatingRecipes(filteredOptions);
+//   }
+//   // console.log(filteredOptions);
+// }
+
+// // FILTER WIHTOUT FILTER FUNCTION
+
+// function generalFilter(list, filtering) {
+//   let filteredOptions = [];
+//   for (const item of list) {
+//     let shouldBeInFilteredOptions = filtering(item);
+//     if (shouldBeInFilteredOptions) {
+//       filteredOptions.push(item);
+//     }
+//   }
+//   return filteredOptions;
+// }
+// function filterValue(recipe, dropDownValueInt) {
+//   const count = recipe.missedIngredientCount + recipe.usedIngredientCount;
+//   return count === dropDownValueInt;
+// }
+
+// function filterByDropdown(recipes) {
+//   // console.log("I am filtering by dropdown");
+//   const dropDownValue = document.getElementById("ingredientsDropdown").value;
+//   console.log("dropDownValue>>", dropDownValue);
+//   if (dropDownValue === "allIngredientsSelected") {
+//     creatingRecipes(recipes);
+//   } else {
+//     const dropDownValueInt = parseInt(dropDownValue);
+//     // console.log("dropDownValueInt>>", dropDownValueInt);
+//     // console.log("recipes>>", recipes);
+//     // const filteredOptions = recipes.filter();
+
+//     let filteredRecepieOptions = generalFilter(recipes, (recipe) =>
+//       filterValue(recipe, dropDownValueInt)
+//     );
+
+//     // console.log("filteredOptions>>", filteredOptions);
+//     creatingRecipes(filteredRecepieOptions);
+//   }
+//   // console.log(filteredOptions);
+// }
+
+// // borja med filterByDropdown
