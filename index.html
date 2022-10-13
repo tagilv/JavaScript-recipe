@@ -27,27 +27,26 @@
       </select>
     </div>
 
-    <!-- Ask why this isnt working tomorrow: -->
-    <!-- <section class="container">
-      <div class="dropdown">
-        <button
-          class="btn btn-secondary dropdown-toggle"
-          type="button"
-          id="dropdownMenuButton"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-          id="ingredientsDropdown"
-        >
-          Number of ingredients needed
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a value="1" class="dropdown-item" href="#">2</a>
-          <a value="2" class="dropdown-item" href="#">5</a>
-          <a value="3" class="dropdown-item" href="#">5+</a>
-        </div>
+    <div class="container">
+    <fieldset>
+    <legend>Number of Likes:</legend>
+      <div>
+        <input class="check-button" type="checkbox" id="likesChoice1"
+        name="likes" value="3">
+        <label for="contactChoice1">3</label>
+
+        <input class="check-button" type="checkbox" id="likesChoice2"
+        name="likes" value="10">
+        <label for="contactChoice2">10+</label>
+
+        <input class="check-button" type="checkbox" id="likesChoice3"
+        name="likes" value="20">
+        <label for="contactChoice3">20+</label>
+        <!-- Could need to add likesChoice1 etc back -->
       </div>
-    </section> -->
+    </fieldset>
+    </form>
+
     <main>
       <div class="container" id="container">
         <div class="row g-2" id="cards-container"></div>
@@ -74,3 +73,25 @@
     ></script>
   </body>
 </html>
+
+<!-- Ask why this isnt working tomorrow: -->
+<!-- <section class="container">
+    <div class="dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+        id="ingredientsDropdown"
+      >
+        Number of ingredients needed
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a value="1" class="dropdown-item" href="#">2</a>
+        <a value="2" class="dropdown-item" href="#">5</a>
+        <a value="3" class="dropdown-item" href="#">5+</a>
+      </div>
+    </div>
+  </section> -->
