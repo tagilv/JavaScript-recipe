@@ -96,17 +96,10 @@ function addEvents(recipes) {
     // console.log("value>>", value);
   });
 
-  let likesFilter = document.querySelectorAll(".check-button", "input:checked");
-  // console.log("likesFilter>>", likesFilter);
-  likesFilter.forEach((item) => {
-    item.addEventListener("change", (e) => {
-      // console.log(likesFilter);
-      // Call filtering function to move to filtering:
-      // console.log(
-      //   Array.from(document.querySelectorAll(".check-button", "input:checked"))
-      // );
-      filterByDropdown(recipes);
-    });
+  let likesFilter = document.getElementById("slider");
+  likesFilter.addEventListener("change", (e) => {
+    // console.log("likesFilter", likesFilter);
+    filterByDropdown(recipes);
   });
 }
 
@@ -117,39 +110,34 @@ function unhideText(e) {
 }
 
 function filterByDropdown(recipes) {
-  //Converting the node list to an array:
-  const likesValuesArray = Array.from(
-    document.querySelectorAll("input[type='checkbox']:checked")
-  );
-  console.log("likesValuesArray>>", likesValuesArray);
-
-  // for (let i = 0; i < likesValuesArray; i++) {
-  //   console.log("likesValuesArray>>", likesValuesArray);
-  // }
+  const likesValue = document.getElementById("slider").value;
+  const likesValueInt = parseInt(likesValue);
+  console.log(likesValueInt);
 
   const dropDownValue = document.getElementById("ingredientsDropdown").value;
-  console.log("dropDownValue>>", dropDownValue);
-  if (dropDownValue === "allIngredientsSelected" && likesValuesArray == "") {
-    // && Andra tom
+  // console.log("dropDownValue>>", dropDownValue);
+  if (dropDownValue === "allIngredientsSelected" && likesValueInt === 0) {
     creatingRecipes(recipes);
   } else if (
     dropDownValue === "allIngredientsSelected" &&
-    likesValuesArray.length !== 0
+    likesValueInt !== 0
   ) {
+    //filter:
+    const filteredResults = recipes.filter((recipe) => {
+      // console.log(recipe.likes);
+      const shouldInclude = recipe.likes >= likesValueInt;
+      return shouldInclude;
+    });
+    creatingRecipes(filteredResults);
     // filter taking values you have in this likesValuesArray 1
-    const likesValue = document.querySelectorAll("check-button").value;
-    console.log("this works");
-
-    const likesValueInt = parseInt(likesValue);
-    console.log(likesValueInt);
-
+    // const likesValue = document.querySelectorAll(".checkbox");
     // let filteredRecepieOptionsLikes = recipes.filter((recipe) => {
     //   const totalLIkes = recipes.like;
     // });
     // console.log(filteredRecepieOptionsLikes);
   } else if (
     dropDownValue !== "allIngredientsSelected" &&
-    likesValuesArray.length === 0
+    likesValueInt.length === 0
   ) {
     const dropDownValueInt = parseInt(dropDownValue);
     let filteredRecepieOptions = recipes.filter((recipe) => {
@@ -163,7 +151,3 @@ function filterByDropdown(recipes) {
     // Include the second filtering in this function?
   }
 }
-
-// What is retrived from checkboxes is array
-// Check how to retrive value of all checklecked checkboxes
-// Filter according to an array (caus its not unique valkye)

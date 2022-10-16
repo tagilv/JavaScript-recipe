@@ -28,25 +28,29 @@
     </div>
 
     <div class="container">
+      <label for="customRange2" class="form-label">Example range</label>
+      <input type="range" class="form-range" min="0" max="40" id="slider">
     <fieldset>
     <legend>Number of Likes:</legend>
-      <div>
-        <input class="check-button" type="checkbox" id="likesChoice1"
+      <div class="box">
+        <input class="checkbox" type="checkbox" id="3"
         name="likes" value="3">
-        <label for="contactChoice1">3</label>
+        <label for="3">3</label>
 
-        <input class="check-button" type="checkbox" id="likesChoice2"
+        <input class="checkbox" type="checkbox" id="10"
         name="likes" value="10">
-        <label for="contactChoice2">10+</label>
+        <label for="10">10</label>
 
-        <input class="check-button" type="checkbox" id="likesChoice3"
+        <input class="checkbox" type="checkbox" id="20"
         name="likes" value="20">
-        <label for="contactChoice3">20+</label>
-        <!-- Could need to add likesChoice1 etc back -->
+        <label for="20">20</label>
       </div>
+
     </fieldset>
     </form>
-
+    <div class="print-values">
+      <p id="valueList"></p>
+    </div>
     <main>
       <div class="container" id="container">
         <div class="row g-2" id="cards-container"></div>
