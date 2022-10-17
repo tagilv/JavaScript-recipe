@@ -1,30 +1,25 @@
-function fetchData(ingredient) {
-  let url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=1d6b052419664714bf2fab7378a281c7&ingredients=${ingredient}&number=5`;
-  fetch("./response.json")
+const initialIngredient = "lime";
+function fetchData(initialIngredient) {
+  let url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=d3a3d82595e240aeb81ed19331e08785&ingredients=${initialIngredient}&number=100`;
+  fetch(url)
     .then((response) => {
       return response.json();
     })
     .then((result) => {
       let myData = result;
-      console.log(myData);
+      console.log("result>>", result);
+      if (result.length === 0) {
+        alert("try with a different ingredient");
+      }
       creatingRecipes(myData);
       addEvents(myData);
-      // createDropdown(data);
       const ingredientsCount = calculatingTotalNeededIngredients(myData);
-      // console.log("ingredientsCount", ingredientsCount);
       // const cleanedIng = cleanedIng(ingredientsCount);
       // const filteredResult = filterByDropdown(ingredientsCount);
     })
     .catch((error) => console.log(error));
 }
-function localData() {
-  let myData = data;
-  console.log(myData);
-  creatingRecipes(myData);
-  addEvents(myData);
-}
-localData();
-// fetchData("lime");
+fetchData(initialIngredient);
 
 function creatingRecipes(recipes) {
   const container = document.getElementById("cards-container");
@@ -79,6 +74,24 @@ function calculatingTotalNeededIngredients(recipes) {
 }
 
 function addEvents(recipes) {
+  const search = document.getElementById("ingredient-search");
+
+  let searchValue = [];
+  search.addEventListener("input", (event) => {
+    // console.log("Input event responding?");
+    // console.log(event);
+    // console.log("input search>>", event.target.value);
+    searchValue = event.target.value;
+  });
+
+  search.addEventListener("keyup", (event) => {
+    // console.log("event keyup>>", event);
+    if (event.key === "Enter") {
+      fetchData(searchValue);
+      console.log("searchValue", searchValue);
+    }
+  });
+
   let cards = document.querySelectorAll(".card");
   for (let i = 0; i < cards.length; i++) {
     // divCardTextTargets = document.querySelectorAll(".card")[i];
