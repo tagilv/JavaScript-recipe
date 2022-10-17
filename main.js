@@ -115,6 +115,8 @@ function filterByDropdown(recipes) {
   console.log(likesValueInt);
 
   const dropDownValue = document.getElementById("ingredientsDropdown").value;
+  const dropDownValueInt = parseInt(dropDownValue); // Added it here to have access in last else
+
   // console.log("dropDownValue>>", dropDownValue);
   if (dropDownValue === "allIngredientsSelected" && likesValueInt === 0) {
     creatingRecipes(recipes);
@@ -139,15 +141,36 @@ function filterByDropdown(recipes) {
     dropDownValue !== "allIngredientsSelected" &&
     likesValueInt.length === 0
   ) {
-    const dropDownValueInt = parseInt(dropDownValue);
+    const dropDownValueInt = parseInt(dropDownValue); // Can remove this?
     let filteredRecepieOptions = recipes.filter((recipe) => {
       const count = recipe.missedIngredientCount + recipe.usedIngredientCount;
+      console.log("count");
       return count === dropDownValueInt;
     });
     creatingRecipes(filteredRecepieOptions);
     // Put whats in else
-  } else {
-    //Skriv .filter igen har
-    // Include the second filtering in this function?
+  } else
+    dropDownValue !== "allIngredientsSelected" && likesValueInt.length !== 0;
+  {
+    //1. First the dropdown value fitlering and then the likes one
+    //Note: I can reach the values here
+    // console.log("dropDownValue", dropDownValue);
+    // console.log("dropDownValueInt", dropDownValueInt);
+    let combinedFilteredRecepieOptions = recipes
+      .filter((recipe) => {
+        const count = recipe.missedIngredientCount + recipe.usedIngredientCount;
+        console.log("dropDownValueInt>>", dropDownValueInt);
+        if (dropDownValue === "allIngredientsSelected") {
+          return "allIngredientsSelected";
+        } else {
+          return count === dropDownValueInt;
+        }
+      })
+      .filter((recipe) => {
+        const shouldInclude = recipe.likes > likesValueInt;
+        return shouldInclude;
+      });
+    creatingRecipes(combinedFilteredRecepieOptions);
+    console.log("likesValueInt>>", likesValueInt);
   }
 }
