@@ -1,6 +1,7 @@
 const initialIngredient = "lime";
+
 function fetchData(initialIngredient) {
-  let url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=d3a3d82595e240aeb81ed19331e08785&ingredients=${initialIngredient}&number=100`;
+  let url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=d3a3d82595e240aeb81ed19331e08785&ingredients=${initialIngredient}&number=5`;
   fetch(url)
     .then((response) => {
       return response.json();
@@ -59,6 +60,11 @@ function creatingRecipes(recipes) {
     likeText.classList.add("card-text");
     likeText.innerText = `${recipes[i].likes}`;
     divCard.appendChild(likeText);
+
+    let anchorElem = document.createElement("a");
+    anchorElem.setAttribute("href", `./details.html?id=` + `${recipes[i].id}`);
+    anchorElem.innerHTML = "See Recipe here";
+    divCard.appendChild(anchorElem);
   }
 }
 
