@@ -3,7 +3,11 @@ let id = paramString.get("id");
 console.log(id);
 
 function fetchData(id) {
-  let url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=1d6b052419664714bf2fab7378a281c7`;
+  const key1 = "d3a3d82595e240aeb81ed19331e08785";
+  const key2 = "1d6b052419664714bf2fab7378a281c7";
+  const key3 = "4756ac3dfd9e41118c1a469a02b5c16f";
+  let url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${key3}`;
+
   fetch(url)
     .then((response) => {
       return response.json();
@@ -15,11 +19,11 @@ function fetchData(id) {
       let ingredientsLoop = result.extendedIngredients;
       creatingIndividualReciepesGettingIngredients(ingredientsLoop);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.log(error, error.message));
 }
 fetchData(id);
 
-function creatingIndividualRecipes(id) {
+function creatingIndividualRecipes(result) {
   const container = document.getElementById("individual-recipe-card-container");
 
   let leftDiv = document.createElement("div");
@@ -27,13 +31,13 @@ function creatingIndividualRecipes(id) {
   container.appendChild(leftDiv);
 
   let img = document.createElement("img");
-  img.setAttribute("src", id.image);
-  img.setAttribute("alt", id.title);
+  img.setAttribute("src", result.image);
+  img.setAttribute("alt", result.title);
   leftDiv.appendChild(img);
 
   let cardTitle = document.createElement("h5");
   cardTitle.classList.add("card-title");
-  cardTitle.innerText = id.instructions;
+  cardTitle.innerText = result.instructions;
   leftDiv.appendChild(cardTitle);
 }
 
